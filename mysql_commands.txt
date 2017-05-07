@@ -1,0 +1,127 @@
+
+creating table:
+
+create table bank_customer (
+id INT(11) NOT NULL AUTO_INCREMENT,
+bank_name VARCHAR(20) NOT NULL,
+customer_inn INT NOT NULL,
+PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+Adding data to the table.
+
+
+
+INSERT INTO bank_customer (bank_name, customer_inn) VALUES ("Alfa Bank", 1234567890);
+
+DROP TABLE bank_customer;
+
+
+
+CREATE TABLE Bank_customer (
+    Number_cards int NOT NULL,
+    Bank char(20) NOT NULL,
+    Customer_Inn int NOT NULL,
+    CONSTRAINT Bank_customer_pk PRIMARY KEY (Number_cards)
+    );
+
+
+CREATE TABLE Bank_customer
+( id INT NOT NULL AUTO_INCREMENT,
+bank_name VARCHAR(20) NOT NULL,
+customer_inn INT NOT NULL, PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+show columns from bank_customer;
+
+SELECT * FROM Bank_customer;
+
+INSERT INTO Bank_customer (bank_name, customer_inn) VALUES ("Alfa bank", 87575665);
+
+
+
+ALTER TABLE Bank_customer MODIFY customer_inn BIGINT NOT NULL;
+
+
+Show command for creating table with the same structure.
+SHOW CREATE TABLE Bank_customer;
+
+
+delete autoincrement:
+TRUNCATE TABLE Bank_customer;
+
+UPDATE Bank_customer SET customer_inn = 1111111111 WHERE id = 2;
+
+
+SELECT COUNT(*), bank_name FROM Bank_customer GROUP BY bank_name;
++----------+------------+
+| COUNT(*) | bank_name  |
++----------+------------+
+|        1 | Alfa bank  |
+|        3 | Privatbank |
++----------+------------+
+
+
+SELECT COUNT(*) as counter, bank_name FROM Bank_customer GROUP BY bank_name ORDER BY counter;
+
+SELECT COUNT(*) as counter, bank_name FROM Bank_customer GROUP BY bank_name HAVING counter>1;
+
+SELECT COUNT(*) as count, bank_name FROM Bank_customer WHERE bank_name = "Privatbank" GROUP BY bank_name;
+
+SELECT COUNT(*) as count, bank_name FROM Bank_customer WHERE bank_name != "Privatbank" GROUP BY bank_name HAVING count>1;
+
+
+
+SELECT COUNT(*) as count, bank_name,GROUP_CONCAT(customer_inn) FROM Bank_customer WHERE bank_name != "Privatbank" GROUP BY bank_name HAVING count>1;
+
+
+CREATE TABLE bank (
+id INT NOT NULL AUTO_INCREMENT,
+bank_name VARCHAR(20) NOT NULL,
+mfo INT(6) NOT NULL,
+PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+INSERT INTO bank (bank_name, mfo) VALUES ("Alfa bank", 111111), ("Privatbank", 222222), ("DDD bank", 333333);
+
+ALTER TABLE Bank_customer ADD COLUMN bank_id INT NOT NULL AFTER id;
+
+UPDATE Bank_customer SET bank_id = 2 WHERE bank_name = "Privatbank";
+
+ALTER TABLE Bank_customer DROP COLUMN bank_name;
+
+ALTER TABLE Bank_customer ADD CONSTRAINT fk_bank_id FOREIGN KEY (bank_id) REFERENCES bank(id) ON DELETE CASCADE/SET NULL;
+
+INSERT INTO Bank_customer (bank_id, customer_inn) VALUES (10, 6666);
+
+EXPLAIN SELECT * from Bank_customer where customer_inn = 55555444;
+
+ALTER TABLE Bank_customer ADD INDEX `inn`(customer_inn);
+
+
+
+
+
+
+Joins!!!!!!!!!!
+SELECT * FROM Bank_customer; - not full information
+
+SELECT bc.id, b.bank_name, bc.customer_inn FROM Bank_customer AS bc JOIN bank as b ON bc.bank_id = b.id;
+
+CREATE TABLE customer (
+customer_inn BIGINT NOT NULL,
+name VARCHAR(255) NOT NULL,
+PRIMARY KEY (customer_inn)
+);
+
+INSERT INTO customer (customer_inn, name) VALUES (6666666666, 'John'), (1111111111, 'Peter');
+
+SELECT bc.id, b.bank_name, bc.customer_inn, c.name
+FROM Bank_customer AS bc
+JOIN bank as b ON bc.bank_id = b.id
+JOIN customer as c ON c.customer_inn = bc.customer_inn;
+
+SELECT bc.id, b.bank_name, bc.customer_inn, c.name
+FROM Bank_customer AS bc
+JOIN bank as b ON bc.bank_id = b.id
+LEFT JOIN customer as c ON c.customer_inn = bc.customer_inn;

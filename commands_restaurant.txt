@@ -1,0 +1,80 @@
+**************************************************************************************************
+CREATE DATABASE restaurant;
+USE restaurant;
+
+**************************************************************************************************
+CREATE TABLE `city` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`city_name` varchar(255) NOT NULL,
+PRIMARY KEY (`id`)) ENGINE=InnoDB;
+INSERT INTO city (city_name) VALUES ("Kiev"), ("Vishneve"), ("Brovary");
+
+
+**************************************************************************************************
+CREATE TABLE street (
+id INT NOT NULL AUTO_INCREMENT ,
+street_name VARCHAR(255) NOT NULL,
+PRIMARY KEY (id)
+);
+INSERT INTO street (street_name) VALUES ("Kreschatyk"),
+("Prorizna"), ("Lva Tolstogo"), ("Zhylianska");
+
+
+
+**************************************************************************************************
+CREATE TABLE personnel (
+id INT NOT NULL AUTO_INCREMENT,
+first_name VARCHAR(255) NOT NULL,
+last_name VARCHAR(255) NOT NULL,
+patronymic VARCHAR(255) DEFAULT NULL,
+sex ENUM ("m", "f") DEFAULT "m",
+date_birth DATE,
+city_id INT,
+street_id INT,
+position VARCHAR(255) NOT NULL,
+salary INT NOT NULL,
+employment_date DATE,
+PRIMARY KEY (id),
+FOREIGN KEY (city_id) REFERENCES city (id),
+FOREIGN KEY (street_id) REFERENCES street (id)
+);
+
+INSERT INTO personnel VALUES
+(1, "Ivanov", "Ivan", "Ivanovish", "m", "1988-01-05", 1, 3, "waiter", 5000, "2017-05-01"),
+(2, "Vasya", "Pupkin", NULL, "m", "1989-01-15", 1, 2, "waiter", 5000, "2017-05-02"),
+(3, "Poroshenko", "Petro", "Oleksiyovich", "m", "1965-09-26", 1, 1, "director", 50000, "2017-05-01"),
+(4, "Stepanova", "Inna", NULL, "f", "1988-01-05", 2, 3, "waitress", 5000, "2017-05-03");
+
+
+**************************************************************************************************
+CREATE TABLE dinner_tables (
+number INT NOT NULL AUTO_INCREMENT,
+description TINYTEXT,
+seats_quantity TINYINT,
+PRIMARY KEY (number)
+);
+
+INSERT INTO dinner_tables (description, seats_quantity) VALUES
+("The delivery", 0),
+("The big one near the window", 8),
+("Little near the door", 2),
+("Little near the window", 2),
+("The table in the center of room", 4);
+
+
+**************************************************************************************************
+CREATE TABLE `restaurant`.`clients` (
+  `client_id` INT(11) NOT NULL,
+  `first_name` VARCHAR(45) NOT NULL,
+  `lastname` VARCHAR(45) NULL,
+  `street` VARCHAR(45) NOT NULL,
+  `city` VARCHAR(45) NOT NULL,
+  `house_number` VARCHAR(45) NULL,
+  `additionnal info` VARCHAR(255) NULL,
+  `phone_number` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`client_id`)
+  );
+
+
+  FOREIGN KEY (`street`) REFERENCES `street` (id) ON DELETE SET NULL ON UPDATE CASCADE,
+      FOREIGN KEY (`city`) REFERENCES `city` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);
